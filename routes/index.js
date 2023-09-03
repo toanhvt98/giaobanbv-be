@@ -1,0 +1,24 @@
+var express = require("express");
+var router = express.Router();
+
+//authApi
+const authApi = require("./auth.api");
+router.use("/auth", authApi);
+
+// //userApi
+const userApi = require("./user.api");
+router.use("/user", userApi);
+
+// //khoaApi
+const khoaApi = require("./khoa.api");
+router.use("/khoa", khoaApi);
+
+//bcgiaobanApi
+const bcgiaobanApi = require("./bcgiaoban.api");
+router.use("/bcgiaoban", bcgiaobanApi);
+
+//baocaongayApi
+const baocaongayApi = require("./baocaongay.api");
+router.use("/baocaongay", baocaongayApi);
+
+module.exports = router;
