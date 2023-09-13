@@ -4,9 +4,11 @@ const bcgiaobanSchema = Schema(
   {
     Ngay: { type: Date, require: true },
     // KhoaID: { type: Schema.ObjectId, required: true, ref: "Khoa" },
+    
+    TrucLanhDao: { type: String, default: "" },
     TTHeNoi: { type: String, default: "" },
     TTHeNgoai: { type: String, default: "" },
-    TrangThai: { type: Boolean, default: false, select: false },
+    TrangThai: { type: Boolean, default: false},
   },
   { timestamps: true }
 );

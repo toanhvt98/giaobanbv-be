@@ -20,4 +20,16 @@ router.post(
   bcgiaobanController.insertOne
 );
 
+// get bcgiaoban theo fromDate toDate, tra ra bcgiaoban co bo sung ngay
+router.get("/allbyngay",bcgiaobanController.getByNgay)
 module.exports = router;
+
+//update or insert BCGiaoBan theo fromDate va toDate, tra ra giong nhu tren
+router.post("/allbyngay",bcgiaobanController.updateOrInsert)
+
+
+//update or insert BCGiaoBan theo fromDate va toDate, tra ra giong nhu tren
+router.post("/trangthai",bcgiaobanController.updateOrInsertTrangThai)
+
+module.exports = router;
+ 

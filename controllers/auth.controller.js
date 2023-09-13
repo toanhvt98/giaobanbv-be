@@ -9,7 +9,7 @@ authController.loginWithUserName = catchAsync(async (req, res, next) => {
   //get data from request
   const { UserName, PassWord } = req.body;
   //Business Logic Validation
-  const user = await User.findOne({ UserName }, "+PassWord");
+  const user = await User.findOne({ UserName }, "+PassWord").populate('KhoaID');
   console.log(user);
   if (!user) throw new AppError(400, "Invalid Credentials", "Login Error");
   //Process

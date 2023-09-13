@@ -19,10 +19,13 @@ router.post(
     body("PassWord", "Invalid password").exists().notEmpty(),
     body("KhoaID", "không có khoaID").exists().notEmpty(),
     body("PhanQuyen", "Không có phân quyền").exists().notEmpty(),
-    body("HoTen", "không có họ tên").exists().notEmpty(),
+ 
   ]),
   userController.insertOne
 );
+
+//thieeu authentication.loginRequired
+router.get("/", userController.getUsers);
 
 
 /**
@@ -32,5 +35,39 @@ router.post(
  */
  router.get("/me", authentication.loginRequired, userController.getCurrentUser);
 
- 
+ router.put(
+  "/:id",
+  authentication.loginRequired,
+  validators.validate([
+    param("id").exists().isString().custom(validators.checkObjectId),
+  ]),
+  userController.updateUser
+);
+ router.put(
+  "/resetpass/:id",
+  authentication.loginRequired,
+  validators.validate([
+    param("id").exists().isString().custom(validators.checkObjectId),
+  ]),
+  userController.resetPass
+);
+
+
+/**
+ * @route DELETE /user/:id
+ * @description  Delete comment
+ * @body
+ * @access Login required
+ */
+router.delete(
+  "/:id",
+  authentication.loginRequired,
+  validators.validate([
+    param("id").exists().isString().custom(validators.checkObjectId),
+    
+  ]),
+  userController.deleteUser
+);
+
+
 module.exports = router;
