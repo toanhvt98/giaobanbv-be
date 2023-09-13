@@ -25,7 +25,7 @@ const baocaongaySchema = Schema(
         Images: { type: [String], default: [] },
         LoaiBN: { type: Number, required: true },
         Stt: { type: Number, required: true },
-        
+        GhiChu: { type: String, default: "" },
       },
       { _id: false },
     ],
