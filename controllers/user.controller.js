@@ -65,7 +65,12 @@ userController.getUsers = catchAsync(async (req, res, next) => {
   const filterConditions = [];
 
   if (filter.UserName) {
-    filterConditions.push({ UserName: { $regex: filter.UserName, $options: "i" } });
+    // filterConditions.push({ UserName: { $regex: filter.UserName, $options: "i" } });
+    filterConditions.push({ $or: [
+      { UserName: { $regex: filter.UserName, $options: "i" } },
+      { HoTen: { $regex: filter.UserName, $options: "i" } },
+      { PhanQuyen: { $regex: filter.UserName, $options: "i" } }
+    ] });
   }
 
   const filterCriteria = filterConditions.length
@@ -82,17 +87,6 @@ userController.getUsers = catchAsync(async (req, res, next) => {
     .skip(offset)
     .limit(limit);
 
-  // const promises = users.map(async (user) => {
-  //   let temp = user.toJSON();
-  //   temp.friendship = await Friend.findOne({
-  //     $or: [
-  //       { from: curentUserId, to: user._id },
-  //       { from: user._id, to: curentUserId },
-  //     ],
-  //   });
-  //   return temp;
-  // });
-  // const usersWithFriends = await Promise.all(promises);
   return sendResponse(
     res,
     200,
