@@ -19,4 +19,8 @@ authController.loginWithUserName = catchAsync(async (req, res, next) => {
   //Response
   sendResponse(res, 200, true, { user, accessToken }, null, "Login success");
 });
+
+
+
+
 module.exports = authController;

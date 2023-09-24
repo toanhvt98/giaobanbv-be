@@ -1,3 +1,4 @@
+const { body } = require("express-validator");
 const { sendResponse, catchAsync, AppError } = require("../helpers/utils");
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
@@ -143,6 +144,29 @@ console.log("userID",userId)
   await user.save();
   return sendResponse(res, 200, true, user, null, "Update User successful");
 });
+
+
+userController.resetPassMe = catchAsync(async (req, res, next) => {
+  //get data from request
+  console.log("body",req.body)
+  let { UserName, PassWordOld,PassWordNew } = req.body;
+ 
+  //Business Logic Validation
+  let user = await User.findOne({ UserName }, "+PassWord");
+  
+  if (!user) throw new AppError(400, "Không tồn tại user", "Reset pass error");
+  //Process
+  let isMatch = await bcrypt.compare(PassWordOld, user.PassWord);
+  if (!isMatch) throw new AppError(400, "Mật khẩu cũ không đúng", "Reset pass error");
+  
+  const salt = await bcrypt.genSalt(10);
+  PassWordNew = await bcrypt.hash(PassWordNew, salt);
+user.PassWord = PassWordNew;
+await user.save();
+  //Response
+  sendResponse(res, 200, true, { user}, null, "Reset Pass success");
+});
+
 
 userController.deleteUser = catchAsync(async (req, res, next) => {
   

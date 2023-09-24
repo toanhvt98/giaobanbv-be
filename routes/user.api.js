@@ -14,6 +14,7 @@ const authentication = require("../middlewares/authentication");
  */
 router.post(
   "/",
+  authentication.loginRequired,
   validators.validate([
     body("UserName", "Invalid name").exists().notEmpty(),
     body("PassWord", "Invalid password").exists().notEmpty(),
@@ -50,6 +51,13 @@ router.get("/", userController.getUsers);
     param("id").exists().isString().custom(validators.checkObjectId),
   ]),
   userController.resetPass
+);
+
+ router.put(
+  "/me/resetpass",
+  authentication.loginRequired,
+  
+  userController.resetPassMe
 );
 
 

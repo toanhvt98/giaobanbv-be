@@ -4,7 +4,7 @@ const { body, param } = require("express-validator");
 const validators = require("../middlewares/validators");
 
 const bcgiaobanController = require("../controllers/bcgiaoban.controller");
-
+const authentication = require("../middlewares/authentication");
 
 /**
  * @route POST /bcgiaobans
@@ -14,6 +14,7 @@ const bcgiaobanController = require("../controllers/bcgiaoban.controller");
  */
 router.post(
   "/",
+  authentication.loginRequired,
   validators.validate([
     body("Ngay", "Invalid Ngay").exists().notEmpty(),
        ]),
@@ -21,15 +22,15 @@ router.post(
 );
 
 // get bcgiaoban theo fromDate toDate, tra ra bcgiaoban co bo sung ngay
-router.get("/allbyngay",bcgiaobanController.getByNgay)
+router.get("/allbyngay",authentication.loginRequired,bcgiaobanController.getByNgay)
 module.exports = router;
 
 //update or insert BCGiaoBan theo fromDate va toDate, tra ra giong nhu tren
-router.post("/allbyngay",bcgiaobanController.updateOrInsert)
+router.post("/allbyngay",authentication.loginRequired,bcgiaobanController.updateOrInsert)
 
 
 //update or insert BCGiaoBan theo fromDate va toDate, tra ra giong nhu tren
-router.post("/trangthai",bcgiaobanController.updateOrInsertTrangThai)
+router.post("/trangthai",authentication.loginRequired,bcgiaobanController.updateOrInsertTrangThai)
 
 module.exports = router;
  

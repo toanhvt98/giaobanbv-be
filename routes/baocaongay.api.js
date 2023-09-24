@@ -4,7 +4,7 @@ const { body, param } = require("express-validator");
 const validators = require("../middlewares/validators");
 
 const baocaongayController = require("../controllers/baocaongay.controller");
-
+const authentication = require("../middlewares/authentication");
 
 /**
  * @route POST /baocaongay
@@ -14,6 +14,7 @@ const baocaongayController = require("../controllers/baocaongay.controller");
  */
 router.post(
   "/",
+  authentication.loginRequired,
   validators.validate([
     body("Ngay", "Invalid Ngay").exists().notEmpty(),
     body("KhoaID", "Invalid KhoaID").exists().notEmpty(),
@@ -24,12 +25,12 @@ router.post(
 
 router.get(
   "/",
-  
+  authentication.loginRequired,
   baocaongayController.getOneByNgayKhoaID
 );
 router.get(
   "/all",
-  
+  authentication.loginRequired,
   baocaongayController.getAllByNgay
 );
 

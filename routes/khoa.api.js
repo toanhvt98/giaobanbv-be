@@ -14,6 +14,7 @@ const authentication = require("../middlewares/authentication");
  */
 router.post(
   "/",
+  authentication.loginRequired,
   validators.validate([
     body("TenKhoa", "Không có tên khoa").exists().notEmpty(),
     body("LoaiKhoa", "Thiếu loại khoa").exists().notEmpty(),
@@ -31,7 +32,7 @@ router.post(
  */
 router.get(
   "/",
-
+  authentication.loginRequired,
   khoaController.getAll
 );
 
