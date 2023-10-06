@@ -21,4 +21,8 @@ router.use("/bcgiaoban", bcgiaobanApi);
 const baocaongayApi = require("./baocaongay.api");
 router.use("/baocaongay", baocaongayApi);
 
+//baocaongayApi
+const baocaosucoApi = require("./baocaosuco.api");
+router.use("/baocaosuco", baocaosucoApi);
+
 module.exports = router;
