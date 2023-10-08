@@ -3,6 +3,7 @@ const Schema = mongosee.Schema;
 const baocaosucoSchema = Schema(
   {
     MaBC: { type: String, default: "" },
+    HinhThuc: { type: String, default: "" },
     NgayBC: { type: Date, require: true },
     KhoaBC: { type: Schema.ObjectId, required: true, ref: "Khoa" },
 
@@ -10,6 +11,7 @@ const baocaosucoSchema = Schema(
     SoBA: { type: String, default: "" },
     NgaySinh: { type: String, default: "" },
     GioiTinh: { type: String, default: "" },
+    DoiTuongSuCo: { type: String, default: "" },
     KhoaBN:{ type: Schema.ObjectId, ref: "Khoa" },
 
     KhoaSuCo: { type: Schema.ObjectId, required: true, ref: "Khoa" },
@@ -21,27 +23,27 @@ const baocaosucoSchema = Schema(
 
     ThongBaoBacSi: {
       type: String,
-      enum: ["Có","Không","Không ghi nhận"],
+      default: ""
     },
     ThongBaoNguoiNha: {
       type: String,
-      enum: ["Có","Không","Không ghi nhận"],
+      default: ""
     },
     ThongBaoNguoiBenh: {
       type: String,
-      enum: ["Có","Không","Không ghi nhận"],
+      default: ""
     },
     GhiNhanHoSo: {
       type: String,
-      enum: ["Có","Không","Không ghi nhận"],
+      default: ""
     },
     PhanLoaiBanDau: {
       type: String,
-      enum: ["Có","Không","Không ghi nhận"],
+      default: ""
     },
     DanhGiaBanDau: {
       type: String,
-      enum: ["Nặng","Trung bình","Nhẹ"],
+      default: ""
     },
 
     TenNguoiBC:{ type: String, default: "" },
@@ -49,7 +51,7 @@ const baocaosucoSchema = Schema(
     Email:{ type: String, default: "" },
     LoaiNguoiBC: {
       type: String,
-      enum: ["Điều dưỡng","Người bệnh","Người nhà/khách","Bác sĩ","Khác"],
+      default: ""
     },
     GhiChuNguoiBC:{ type: String, default: "" },
     NguoiChungKien:{ type: String, default: "" },

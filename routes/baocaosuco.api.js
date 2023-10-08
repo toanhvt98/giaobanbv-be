@@ -3,7 +3,7 @@ const router = express.Router();
 const { body, param } = require("express-validator");
 const validators = require("../middlewares/validators");
 
-const baocaongayController = require("../controllers/baocaongay.controller");
+const baocaosucoController = require("../controllers/baocaosuco.controller");
 const authentication = require("../middlewares/authentication");
 
 /**
@@ -15,23 +15,19 @@ const authentication = require("../middlewares/authentication");
 router.post(
   "/",
   authentication.loginRequired,
-  validators.validate([
-    body("Ngay", "Invalid Ngay").exists().notEmpty(),
-    body("KhoaID", "Invalid KhoaID").exists().notEmpty(),
-    
-       ]),
-  baocaongayController.insertOrUpdateOne
+  
+  baocaosucoController.insertOne
 );
 
-router.get(
-  "/",
-  authentication.loginRequired,
-  baocaongayController.getOneByNgayKhoaID
-);
+// router.get(
+//   "/",
+//   authentication.loginRequired,
+//   baocaongayController.getOneByNgayKhoaID
+// );
 router.get(
   "/all",
   authentication.loginRequired,
-  baocaongayController.getAllByNgay
+  baocaosucoController.getBaocaosucos
 );
 
 module.exports = router;

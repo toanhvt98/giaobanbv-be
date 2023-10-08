@@ -1,26 +1,20 @@
 const { catchAsync, sendResponse, AppError } = require("../helpers/utils");
-const BaoCaoNgay = require("../models/BaoCaoNgay");
+const BaoCaoSuCo = require("../models/BaoCaoSuCo");
 
-const baocaongayController = {};
+const baocaosucoController = {};
 
-baocaongayController.insertOrUpdateOne = catchAsync(async (req, res, next) => {
+baocaosucoController.insertOne = catchAsync(async (req, res, next) => {
   //get data from request
   // let { Ngay,KhoaID, BSTruc, DDTruc, GhiChu,CBThemGio,UserID,ChiTietBenhNhan,ChiTietChiSo } = req.body;
   console.log("reqbody", req.body);
-  let { Ngay, KhoaID, bcGiaoBanTheoNgay } = req.body;
+  let baocaosuco = {...req.body};
 
   //Business Logic Validation
-  let baocaongay = await BaoCaoNgay.findOne({ Ngay, KhoaID });
-  console.log(baocaongay);
-  if (baocaongay) {
-    const id = baocaongay._id;
-    baocaongay = await BaoCaoNgay.findByIdAndUpdate(id, bcGiaoBanTheoNgay, {
-      new: true,
-    });
-  } else {
-    baocaongay = await BaoCaoNgay.create(bcGiaoBanTheoNgay);
-  }
+  
+  console.log(baocaosuco);
 
+  baocaosuco = await BaoCaoSuCo.create(baocaosuco)
+ 
   //Process
 
   // baocaongay = await BaoCaoNgay.create({Ngay,KhoaID, BSTruc, DDTruc, GhiChu,CBThemGio,UserID,ChiTietBenhNhan,ChiTietChiSo });
@@ -30,13 +24,13 @@ baocaongayController.insertOrUpdateOne = catchAsync(async (req, res, next) => {
     res,
     200,
     true,
-    { baocaongay },
+    baocaosuco,
     null,
     "Cap nhat BaoCaoNgay success"
   );
 });
 
-baocaongayController.getOneByNgayKhoaID = catchAsync(async (req, res, next) => {
+baocaosucoController.getOneByNgayKhoaID = catchAsync(async (req, res, next) => {
   //get data from request
   console.log("reqbody", req.query);
   const NgayISO = req.query.Ngay;
@@ -64,28 +58,46 @@ sendResponse(res, 200, true, { baocaongay }, null, "Get BaoCaoNgay success, BaoC
 
   
 });
-baocaongayController.getAllByNgay = catchAsync(async (req, res, next) => {
-  //get data from request
-  console.log("reqbody", req.query);
-  const NgayISO = req.query.Ngay;
-  
-const Ngay = new Date(NgayISO)
-  
-  //Business Logic Validation
-  let baocaongays = await BaoCaoNgay.find({Ngay}).populate('KhoaID');
-  console.log("baocaongay", baocaongays);
-  if (!baocaongays) {
-    baocaongays = [],
-    
-    sendResponse(res, 200, true, { baocaongays}, null, "Get BaoCaoNgay All success, Chưa có dữ lệu nào");
-  } else {
-//Response
-sendResponse(res, 200, true, { baocaongays }, null, "Get BaoCaoNgay All success,");
+baocaosucoController.getBaocaosucos = catchAsync(async (req, res, next) => {
+  const curentUserId = req.userId;
+  let { page, limit, ...filter } = { ...req.query };
+
+  page = parseInt(page) || 1;
+  limit = parseInt(limit) || 10;
+
+  const filterConditions = [];
+
+  if (filter.UserName) {
+    // filterConditions.push({ UserName: { $regex: filter.UserName, $options: "i" } });
+    filterConditions.push({ $or: [
+      { HinhThuc: { $regex: filter.UserName, $options: "i" } },
+      { TenBN: { $regex: filter.UserName, $options: "i" } },
+      { SoBA: { $regex: filter.UserName, $options: "i" } }
+    ] });
   }
 
-  //Process
+  const filterCriteria = filterConditions.length
+    ? { $and: filterConditions }
+    : {};
 
-  
+  const count = await BaoCaoSuCo.countDocuments(filterCriteria);
+  const totalPages = Math.ceil(count / limit);
+  const offset = limit * (page - 1);
+
+  console.log("filter",filterConditions)
+  let baocaosucos = await User.find(filterCriteria)
+    .sort({ createdAt: -1 })
+    .skip(offset)
+    .limit(limit);
+
+  return sendResponse(
+    res,
+    200,
+    true,
+    { baocaosucos, totalPages, count },
+    null,
+    ""
+  );
 });
 
-module.exports = baocaongayController;
+module.exports = baocaosucoController;
