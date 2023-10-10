@@ -25,9 +25,14 @@ router.post(
 //   baocaongayController.getOneByNgayKhoaID
 // );
 router.get(
-  "/all",
+  "/",
   authentication.loginRequired,
   baocaosucoController.getBaocaosucos
+);
+router.get(
+  "/:id",
+  authentication.loginRequired, validators.validate([param("id").exists().isString().custom(validators.checkObjectId)]),
+  baocaosucoController.getById
 );
 
 module.exports = router;

@@ -30,6 +30,18 @@ baocaosucoController.insertOne = catchAsync(async (req, res, next) => {
   );
 });
 
+
+baocaosucoController.getById = catchAsync(async (req, res, next) => {
+  
+  const sucoId = req.params.sucoId;
+console.log("userID",sucoId)
+  let baocaosuco = await BaoCaoSuCo.findById(sucoId);
+  if (!baocaosuco) throw new AppError(400, "BaoCaoSuCo not found", "Update  BaoCaoSuCo Error");
+
+  return sendResponse(res, 200, true, baocaosuco, null, "Get BaoCaoSuCo successful");
+});
+
+
 baocaosucoController.getOneByNgayKhoaID = catchAsync(async (req, res, next) => {
   //get data from request
   console.log("reqbody", req.query);
@@ -56,10 +68,9 @@ sendResponse(res, 200, true, { baocaongay }, null, "Get BaoCaoNgay success, BaoC
 
   //Process
 
-  
 });
 baocaosucoController.getBaocaosucos = catchAsync(async (req, res, next) => {
-  const curentUserId = req.userId;
+  // const curentUserId = req.userId;
   let { page, limit, ...filter } = { ...req.query };
 
   page = parseInt(page) || 1;
@@ -85,7 +96,7 @@ baocaosucoController.getBaocaosucos = catchAsync(async (req, res, next) => {
   const offset = limit * (page - 1);
 
   console.log("filter",filterConditions)
-  let baocaosucos = await User.find(filterCriteria)
+  let baocaosucos = await BaoCaoSuCo.find(filterCriteria).populate('KhoaSuCo')
     .sort({ createdAt: -1 })
     .skip(offset)
     .limit(limit);
