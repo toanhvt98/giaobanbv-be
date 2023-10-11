@@ -111,4 +111,44 @@ baocaosucoController.getBaocaosucos = catchAsync(async (req, res, next) => {
   );
 });
 
+
+
+baocaosucoController.deleteOneSuco = catchAsync(async (req, res, next) => {
+  
+  const sucoId = req.params.sucoId;
+
+  const suco = await BaoCaoSuCo.findOneAndDelete({
+    _id: sucoId,
+    });
+ 
+  return sendResponse(
+    res,
+    200,
+    true,
+    suco,
+    null,
+    "Delete User successful"
+  );
+});
+
+baocaosucoController.updateOneSuco = catchAsync(async (req, res, next) => {
+  
+  const sucoId = req.body.sucoId;
+
+
+  const suco = await BaoCaoSuCo.findOneAndDelete({
+    _id: sucoId,
+    });
+ 
+  return sendResponse(
+    res,
+    200,
+    true,
+    suco,
+    null,
+    "Delete User successful"
+  );
+});
+
+
 module.exports = baocaosucoController;

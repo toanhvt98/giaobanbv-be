@@ -30,9 +30,18 @@ router.get(
   baocaosucoController.getBaocaosucos
 );
 router.get(
-  "/:id",
-  authentication.loginRequired, validators.validate([param("id").exists().isString().custom(validators.checkObjectId)]),
+  "/:sucoId",
+  authentication.loginRequired, validators.validate([param("sucoId").exists().isString().custom(validators.checkObjectId)]),
   baocaosucoController.getById
+);
+
+router.delete(
+  "/:sucoId",
+  authentication.loginRequired,
+  validators.validate([
+    param("sucoId").exists().isString().custom(validators.checkObjectId),
+      ]),
+  baocaosucoController.deleteOneSuco
 );
 
 module.exports = router;
