@@ -77,7 +77,7 @@ ChiTietKhuyenCao:{ type: String, default: "" },
 
 LoaiTonThuongNB:{type: Number},
 TonThuongChiTiet: { type: String, default: "" },
-TonThuongToChuc:{type: String, default: ""}
+TonThuongToChuc:{ type: [String], default: [] },
   },
 
   { timestamps: true }
