@@ -43,5 +43,17 @@ router.delete(
       ]),
   baocaosucoController.deleteOneSuco
 );
+router.put(
+  "/update",
+  authentication.loginRequired,
+ 
+  baocaosucoController.updateOneSuco
+);
+router.put(
+  "/updatetrangthai",
+  authentication.loginRequired,
+ 
+  baocaosucoController.updateTrangThaiSuco
+);
 
 module.exports = router;

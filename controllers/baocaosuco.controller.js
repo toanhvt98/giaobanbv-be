@@ -132,21 +132,48 @@ baocaosucoController.deleteOneSuco = catchAsync(async (req, res, next) => {
 });
 
 baocaosucoController.updateOneSuco = catchAsync(async (req, res, next) => {
-  
-  const sucoId = req.body.sucoId;
-
-
-  const suco = await BaoCaoSuCo.findOneAndDelete({
-    _id: sucoId,
-    });
  
+  let {baocaosuco } = req.body;
+  console.log("bcsuco",baocaosuco)
+let suco = await BaoCaoSuCo.findById(baocaosuco._id||0);
+if(!suco) throw new AppError(400,"SuCo not found","Update Suco error");
+if (suco) {
+  
+  const id = suco._id;
+  suco = await BaoCaoSuCo.findByIdAndUpdate(id, baocaosuco, {
+    new: true,
+  });
+}
+
   return sendResponse(
     res,
     200,
     true,
     suco,
     null,
-    "Delete User successful"
+    "Update Suco successful"
+  );
+});
+baocaosucoController.updateTrangThaiSuco = catchAsync(async (req, res, next) => {
+ 
+  let {sucoId,trangthai } = req.body;
+  console.log("bcsuco",{sucoId,trangthai})
+let suco = await BaoCaoSuCo.findById(sucoId||0);
+if(!suco) throw new AppError(400,"SuCo not found","Update Suco error");
+if (suco) {
+ 
+  suco = await BaoCaoSuCo.findByIdAndUpdate(sucoId, {TrangThai:trangthai}, {
+    new: true,
+  });
+}
+
+  return sendResponse(
+    res,
+    200,
+    true,
+    suco,
+    null,
+    "Update Suco successful"
   );
 });
 

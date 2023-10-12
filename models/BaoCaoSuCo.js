@@ -62,7 +62,7 @@ const baocaosucoSchema = Schema(
 
   MoTaChuyenTrach: { type: String, default: "" },
   NhomSuCo: { type: Number },
-  ChiTietSuCo:{ type: String, default: "" },
+  ChiTietNhomSuCo:{ type: String, default: "" },
   XuLyDaLamChuyenTrach:{ type: String, default: "" },
 
   NhomNguyenNhan: { type: Number },
