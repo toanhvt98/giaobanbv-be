@@ -210,7 +210,7 @@ baocaosucoController.tongHopSuCoYKhoa1 = catchAsync(async (req, res, next) => {
 baocaosucoController.tongHopSuCoYKhoa = catchAsync(async (req, res, next) => {
   const fromDate = new Date(req.query.fromdate);
   const toDate = new Date(req.query.todate);
-
+console.log("date",fromDate,toDate)
   const results = await BaoCaoSuCo.aggregate([
     {
       $match: {
@@ -407,7 +407,7 @@ baocaosucoController.tongHopSuCoYKhoa = catchAsync(async (req, res, next) => {
             $cond: [{ $eq: ["$TonThuongChiTiet",'H'] }, 1, 0],
           },
         },
-        TonHaiTaiSan: {
+        TonThuongI: {
           $sum: {
             $cond: [{ $eq: ["$TonThuongChiTiet",'I'] }, 1, 0],
           },
@@ -422,7 +422,7 @@ baocaosucoController.tongHopSuCoYKhoa = catchAsync(async (req, res, next) => {
       },
     },
   ]);
-
+console.log("result",results)
   const data = results[0] || {};
 
   return sendResponse(
