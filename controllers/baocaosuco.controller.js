@@ -177,5 +177,262 @@ if (suco) {
   );
 });
 
+baocaosucoController.tongHopSuCoYKhoa1 = catchAsync(async (req, res, next) => {
+  const fromDate = new Date(req.query.fromdate);
+  const toDate = new Date(req.query.todate);
+
+  // Điều kiện lọc dữ liệu
+  const filterConditions = {
+    NgaySuCo: {
+      $gte: fromDate,
+      $lte: toDate,
+    },
+    TrangThai: true,
+  };
+
+  // Lấy số dòng mà HinhThuc = 'Tự nguyện'
+  const tuNguyenCount = await BaoCaoSuCo.countDocuments({
+    ...filterConditions,
+    HinhThuc: 'Tự nguyện',
+  });
+
+  // Trả về kết quả
+  return sendResponse(
+    res,
+    200,
+    true,
+    { TuNguyen: tuNguyenCount },
+    null,
+    "Tổng hợp sự cố y khoa thành công"
+  );
+});
+
+baocaosucoController.tongHopSuCoYKhoa = catchAsync(async (req, res, next) => {
+  const fromDate = new Date(req.query.fromdate);
+  const toDate = new Date(req.query.todate);
+
+  const results = await BaoCaoSuCo.aggregate([
+    {
+      $match: {
+        NgaySuCo: {
+          $gte: fromDate,
+          $lte: toDate,
+        },
+        TrangThai: true,
+      },
+    },
+    {
+      $group: {
+        _id: null,
+        TuNguyen: {
+          $sum: {
+            $cond: [{ $eq: ["$HinhThuc", "Tự nguyện"] }, 1, 0],
+          },
+        },
+        BatBuoc: {
+          $sum: {
+            $cond: [{ $eq: ["$HinhThuc", "Bắt buộc"] }, 1, 0],
+          },
+        },
+        ChuaXayRa: {
+          $sum: {
+            $cond: [{ $eq: ["$TonThuongChiTiet", "A"] }, 1, 0],
+          },
+        },
+        DaXayRa: {
+          $sum: {
+            $cond: [
+              { $in: ["$TonThuongChiTiet", ['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']] },
+              1,
+              0,
+            ],
+          },
+        },
+
+        Nang: {
+          $sum: {
+            $cond: [
+              { $in: ["$TonThuongChiTiet", ['G', 'H', 'I']] },
+              1,
+              0,
+            ],
+          },
+        },
+        
+        TrungBinh: {
+          $sum: {
+            $cond: [
+              { $in: ["$TonThuongChiTiet", ['E', 'F']] },
+              1,
+              0,
+            ],
+          },
+        },
+        
+        Nhe: {
+          $sum: {
+            $cond: [
+              { $in: ["$TonThuongChiTiet", ['B', 'C', 'D']] },
+              1,
+              0,
+            ],
+          },
+        },
+        
+        NhomNguyenNhan1: {
+          $sum: {
+            $cond: [{ $eq: ["$NhomNguyenNhan",1] }, 1, 0],
+          },
+        },
+        NhomNguyenNhan2: {
+          $sum: {
+            $cond: [{ $eq: ["$NhomNguyenNhan",2] }, 1, 0],
+          },
+        },
+        NhomNguyenNhan3: {
+          $sum: {
+            $cond: [{ $eq: ["$NhomNguyenNhan",3] }, 1, 0],
+          },
+        },
+        NhomNguyenNhan4: {
+          $sum: {
+            $cond: [{ $eq: ["$NhomNguyenNhan",4] }, 1, 0],
+          },
+        },
+        NhomNguyenNhan5: {
+          $sum: {
+            $cond: [{ $eq: ["$NhomNguyenNhan",5] }, 1, 0],
+          },
+        },
+        NhomNguyenNhan6: {
+          $sum: {
+            $cond: [{ $eq: ["$NhomNguyenNhan",6] }, 1, 0],
+          },
+        },
+        
+        NhomSuCo1: {
+          $sum: {
+            $cond: [{ $eq: ["$NhomSuCo",1] }, 1, 0],
+          },
+        },
+        NhomSuCo2: {
+          $sum: {
+            $cond: [{ $eq: ["$NhomSuCo",2] }, 1, 0],
+          },
+        },
+        NhomSuCo3: {
+          $sum: {
+            $cond: [{ $eq: ["$NhomSuCo",3] }, 1, 0],
+          },
+        },
+        NhomSuCo4: {
+          $sum: {
+            $cond: [{ $eq: ["$NhomSuCo",4] }, 1, 0],
+          },
+        },
+        NhomSuCo5: {
+          $sum: {
+            $cond: [{ $eq: ["$NhomSuCo",5] }, 1, 0],
+          },
+        },
+        NhomSuCo6: {
+          $sum: {
+            $cond: [{ $eq: ["$NhomSuCo",6] }, 1, 0],
+          },
+        },
+        NhomSuCo7: {
+          $sum: {
+            $cond: [{ $eq: ["$NhomSuCo",7] }, 1, 0],
+          },
+        },
+        NhomSuCo8: {
+          $sum: {
+            $cond: [{ $eq: ["$NhomSuCo",8] }, 1, 0],
+          },
+        },
+        NhomSuCo9: {
+          $sum: {
+            $cond: [{ $eq: ["$NhomSuCo",9] }, 1, 0],
+          },
+        },
+        NhomSuCo10: {
+          $sum: {
+            $cond: [{ $eq: ["$NhomSuCo",10] }, 1, 0],
+          },
+        },
+        NhomSuCo11: {
+          $sum: {
+            $cond: [{ $eq: ["$NhomSuCo",11] }, 1, 0],
+          },
+        },
+
+        TonThuongA: {
+          $sum: {
+            $cond: [{ $eq: ["$TonThuongChiTiet",'A'] }, 1, 0],
+          },
+        },
+      
+        TonThuongB: {
+          $sum: {
+            $cond: [{ $eq: ["$TonThuongChiTiet",'B'] }, 1, 0],
+          },
+        },
+        TonThuongC: {
+          $sum: {
+            $cond: [{ $eq: ["$TonThuongChiTiet",'C'] }, 1, 0],
+          },
+        },
+        TonThuongD: {
+          $sum: {
+            $cond: [{ $eq: ["$TonThuongChiTiet",'D'] }, 1, 0],
+          },
+        },
+        TonThuongE: {
+          $sum: {
+            $cond: [{ $eq: ["$TonThuongChiTiet",'E'] }, 1, 0],
+          },
+        },
+        TonThuongF: {
+          $sum: {
+            $cond: [{ $eq: ["$TonThuongChiTiet",'F'] }, 1, 0],
+          },
+        },
+        TonThuongG: {
+          $sum: {
+            $cond: [{ $eq: ["$TonThuongChiTiet",'G'] }, 1, 0],
+          },
+        },
+        TonThuongH: {
+          $sum: {
+            $cond: [{ $eq: ["$TonThuongChiTiet",'H'] }, 1, 0],
+          },
+        },
+        TonHaiTaiSan: {
+          $sum: {
+            $cond: [{ $eq: ["$TonThuongChiTiet",'I'] }, 1, 0],
+          },
+        },
+
+        TonHaiTaiSan: {
+          $sum: {
+            $cond: [{ $in: ["Tổn hại tài sản", "$TonThuongToChuc"] }, 1, 0],
+          },
+        },
+        
+      },
+    },
+  ]);
+
+  const data = results[0] || {};
+
+  return sendResponse(
+    res,
+    200,
+    true,
+    data,
+    null,
+    "Tổng hợp sự cố y khoa thành công"
+  );
+});
 
 module.exports = baocaosucoController;

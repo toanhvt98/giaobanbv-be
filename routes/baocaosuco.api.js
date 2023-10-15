@@ -29,6 +29,13 @@ router.get(
   authentication.loginRequired,
   baocaosucoController.getBaocaosucos
 );
+
+router.get(
+  "/tonghop",
+  authentication.loginRequired,
+  baocaosucoController.tongHopSuCoYKhoa
+);
+
 router.get(
   "/:sucoId",
   authentication.loginRequired, validators.validate([param("sucoId").exists().isString().custom(validators.checkObjectId)]),
