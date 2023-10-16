@@ -35,6 +35,11 @@ router.get(
   authentication.loginRequired,
   baocaosucoController.tongHopSuCoYKhoa
 );
+router.get(
+  "/tonghoptheokhoa",
+  authentication.loginRequired,
+  baocaosucoController.tongHopSuCoTheoKhoa
+);
 
 router.get(
   "/:sucoId",

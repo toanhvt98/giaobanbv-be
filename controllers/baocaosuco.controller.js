@@ -1,6 +1,6 @@
 const { catchAsync, sendResponse, AppError } = require("../helpers/utils");
 const BaoCaoSuCo = require("../models/BaoCaoSuCo");
-
+const Khoa = require("../models/Khoa");
 const baocaosucoController = {};
 
 baocaosucoController.insertOne = catchAsync(async (req, res, next) => {
@@ -419,10 +419,42 @@ console.log("date",fromDate,toDate)
           },
         },
         
+        TangNguonLuc: {
+          $sum: {
+            $cond: [{ $in: ["Tăng nguồn lực phục vụ cho người bệnh", "$TonThuongToChuc"] }, 1, 0],
+          },
+        },
+        
+        QuanTamTruyenThong: {
+          $sum: {
+            $cond: [{ $in: ["Quan tâm của truyền thông", "$TonThuongToChuc"] }, 1, 0],
+          },
+        },
+        
+        TonHaiDanhTieng: {
+          $sum: {
+            $cond: [{ $in: ["Tổn hại danh tiếng", "$TonThuongToChuc"] }, 1, 0],
+          },
+        },
+        
+        CanThiepPhapLuat: {
+          $sum: {
+            $cond: [{ $in: ["Can thiệp của pháp luật", "$TonThuongToChuc"] }, 1, 0],
+          },
+        },
+        
+        Khac: {
+          $sum: {
+            $cond: [{ $in: ["Khác", "$TonThuongToChuc"] }, 1, 0],
+          },
+        },
+        
       },
     },
+
   ]);
 console.log("result",results)
+
   const data = results[0] || {};
 
   return sendResponse(
@@ -435,4 +467,62 @@ console.log("result",results)
   );
 });
 
+baocaosucoController.tongHopSuCoTheoKhoa = catchAsync(async (req, res, next) => {
+  const fromDate = new Date(req.query.fromdate);
+  const toDate = new Date(req.query.todate);
+  console.log("date in theo khoa", fromDate, toDate);
+
+
+  const khoas = await Khoa.find({});
+  console.log("Khoa",khoas)
+const results = await BaoCaoSuCo.aggregate([
+  {
+    $match: {
+      NgaySuCo: {
+        $gte: fromDate,
+        $lte: toDate,
+      },
+      TrangThai: true,
+    },
+  },
+  {
+    $group: {
+      _id: "$KhoaSuCo",
+      SoLuong: { $sum: 1 },
+    },
+  },
+]).exec(); // Sử dụng .exec() để kết hợp với populate
+
+console.log("result", results);
+
+
+// Sử dụng Mongoose Populate để tham chiếu thông tin từ bảng Khoa
+// await BaoCaoSuCo.populate(results, { path: "_id", select: "TenKhoa" });
+
+console.log("result populate", results);
+
+ // Sử dụng ánh xạ giữa _id của KhoaSuCo và TenKhoa
+ const khoaMap = new Map();
+ for (const khoa of khoas) {
+   khoaMap.set(khoa._id.toString(), khoa.TenKhoa);
+ }
+
+const totalSoLuong = results.reduce((acc, result) => acc + result.SoLuong, 0);
+  // Thêm trường STT bằng cách tính toán
+const data = results.map((result, index) => ({
+  STT: index + 1, // Số thứ tự tự đánh bắt đầu từ 1
+   TenKhoa: khoaMap.get(result._id.toString()) || 'Unknown',
+  SoLuong: result.SoLuong,
+  KhoaSuCo: result._id,
+  TyLe:(result.SoLuong / totalSoLuong * 100).toFixed(0) +"%",
+}));
+  return sendResponse(
+    res,
+    200,
+    true,
+    data,
+    null,
+    "Tổng hợp sự cố y khoa thành công"
+  );
+});
 module.exports = baocaosucoController;
