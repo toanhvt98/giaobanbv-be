@@ -29,8 +29,13 @@ router.get(
   authentication.loginRequired,
   baocaosucoController.getBaocaosucos
 );
-
 router.get(
+  "/danhsach",
+  authentication.loginRequired,
+  baocaosucoController.getBaocaosucosForDataGrid
+);
+
+router.get( 
   "/tonghop",
   authentication.loginRequired,
   baocaosucoController.tongHopSuCoYKhoa

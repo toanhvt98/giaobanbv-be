@@ -111,6 +111,58 @@ baocaosucoController.getBaocaosucos = catchAsync(async (req, res, next) => {
   );
 });
 
+baocaosucoController.getBaocaosucosForDataGrid = catchAsync(async (req, res, next) => {
+  const fromDate = new Date(req.query.fromdate);
+  const toDate = new Date(req.query.todate);
+  const trangthai = req.query.trangthai
+
+  const page =  1;
+  const limit =  100;
+
+  // Tạo một đối tượng cho các điều kiện tìm kiếm
+  const filterConditions = [];
+
+  
+    // Thêm điều kiện NgaySuCo nằm trong khoảng fromdate và todate
+    filterConditions.push({
+      NgaySuCo: {
+        $gte: fromDate,
+        $lte: toDate,
+      },
+    });
+  
+
+  if (trangthai !== "Tất cả") {
+    // Thêm điều kiện TrangThai dựa trên trangthai
+    filterConditions.push({
+      TrangThai: trangthai === "Đã tiếp nhận",
+    });
+  }
+
+  // Tạo một điều kiện $and chứa tất cả các điều kiện tìm kiếm
+  const filterCriteria = filterConditions.length ? { $and: filterConditions } : {};
+
+  // Đếm số báo cáo sự cố thỏa mãn điều kiện
+  const count = await BaoCaoSuCo.countDocuments(filterCriteria);
+  const totalPages = Math.ceil(count / limit);
+  const offset = limit * (page - 1);
+
+  // Tìm và lấy danh sách báo cáo sự cố dựa trên điều kiện tìm kiếm
+  let baocaosucos = await BaoCaoSuCo.find(filterCriteria).populate('KhoaSuCo')
+    .sort({ createdAt: -1 })
+    .skip(offset)
+    .limit(limit);
+
+  return sendResponse(
+    res,
+    200,
+    true,
+    { baocaosucos, totalPages, count },
+    null,
+    "Get BaoCaoSuCo success"
+  );
+});
+
 
 
 baocaosucoController.deleteOneSuco = catchAsync(async (req, res, next) => {
