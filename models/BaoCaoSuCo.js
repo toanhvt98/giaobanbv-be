@@ -55,6 +55,7 @@ const baocaosucoSchema = Schema(
     },
     GhiChuNguoiBC:{ type: String, default: "" },
     NguoiChungKien:{ type: String, default: "" },
+    LyDoKhongTiepNhan:{ type: String, default: "" },
     
     TrangThai: { type: Boolean, default: false},
 
