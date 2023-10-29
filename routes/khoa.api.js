@@ -30,10 +30,21 @@ router.post(
  * @body {TenKhoa,LoaiKhoa,STT,MaKhoa}
  * @access
  */
-router.get(
-  "/",
+router.get("/", authentication.loginRequired, khoaController.getAll);
+router.delete(
+  "/:id",
   authentication.loginRequired,
-  khoaController.getAll
+  validators.validate([
+    param("id").exists().isString().custom(validators.checkObjectId),
+  ]),
+  khoaController.deleteKhoa
 );
-
+router.put(
+  "/:id",
+  authentication.loginRequired,
+  validators.validate([
+    param("id").exists().isString().custom(validators.checkObjectId),
+  ]),
+  khoaController.updateKhoa
+);
 module.exports = router;
