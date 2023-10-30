@@ -49,15 +49,15 @@ khoaController.updateKhoa = catchAsync(async (req, res, next) => {
   if (!khoa) throw new AppError(400, "Không tồn tại khoa", "update khoa error");
 
   let check = await Khoa.findOne({ MaKhoa: MaKhoa });
-  if (check && check._id !== id)
+
+  if (check.MaKhoa === MaKhoa && !check._id.equals(id))
     throw new AppError(400, "Không tồn tại khoa", "update khoa error");
-  else {
-    khoa.STT = STT;
-    khoa.TenKhoa = TenKhoa;
-    khoa.MaKhoa = MaKhoa;
-    khoa.LoaiKhoa = LoaiKhoa;
-    khoa.save();
-    sendResponse(res, 200, true, { khoa }, null, "Created Khoa success");
-  }
+
+  khoa.STT = STT;
+  khoa.TenKhoa = TenKhoa;
+  khoa.MaKhoa = MaKhoa;
+  khoa.LoaiKhoa = LoaiKhoa;
+  khoa.save();
+  sendResponse(res, 200, true, { khoa }, null, "Created Khoa success");
 });
 module.exports = khoaController;
