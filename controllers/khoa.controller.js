@@ -48,10 +48,12 @@ khoaController.updateKhoa = catchAsync(async (req, res, next) => {
 
   if (!khoa) throw new AppError(400, "Không tồn tại khoa", "update khoa error");
 
-  let check = await Khoa.findOne({ MaKhoa: MaKhoa });
+  try {
+    let check = await Khoa.findOne({ MaKhoa: MaKhoa });
 
-  if (check.MaKhoa === MaKhoa && !check._id.equals(id))
-    throw new AppError(400, "Không tồn tại khoa", "update khoa error");
+    if (check.MaKhoa === MaKhoa && !check._id.equals(id))
+      throw new AppError(400, "Không tồn tại khoa", "update khoa error");
+  } catch (error) {}
 
   khoa.STT = STT;
   khoa.TenKhoa = TenKhoa;
