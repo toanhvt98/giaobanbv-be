@@ -215,3 +215,5 @@ npm run start
 
 
 # ERD
+
+![Alt text](diagramGiaobanBV.jpg)
