@@ -7,10 +7,10 @@ const { use } = require("./auth.api");
 const authentication = require("../middlewares/authentication");
 
 /**
- * @route POST /users
- * @description Insert a new account
+ * @route POST /user  
+ * @description  Insert a new account
  * @body {UserName,Email,PassWord,KhoaID,HoTen,PhanQuyen}
- * @access
+ * @access Admin require
  */
 router.post(
   "/",
@@ -32,10 +32,18 @@ router.get("/", userController.getUsers);
 /**
  *@route GET /users/me
  * @description  Get current user info
+ * @params  userId
  * @access Login required
  */
  router.get("/me", authentication.loginRequired, userController.getCurrentUser);
 
+
+ /**
+ * @route PUT /user  
+ * @description  Update a account
+ * @body {userId,UserName,Email,PassWord,KhoaID,HoTen,PhanQuyen}
+ * @access Admin require
+ */
  router.put(
   "/:id",
   authentication.loginRequired,
@@ -44,6 +52,13 @@ router.get("/", userController.getUsers);
   ]),
   userController.updateUser
 );
+
+/**
+ * @route PUT /user/resetpass/:id  
+ * @description  reset pass 
+ * @body {PassWord}
+ * @access Admin require
+ */
  router.put(
   "/resetpass/:id",
   authentication.loginRequired,
@@ -53,6 +68,13 @@ router.get("/", userController.getUsers);
   userController.resetPass
 );
 
+
+/**
+ * @route PUT /user/me/resetpass/
+ * @description  reset pass curent user
+ * @body {PassWord}
+ * @access Login require
+ */
  router.put(
   "/me/resetpass",
   authentication.loginRequired,
@@ -63,10 +85,10 @@ router.get("/", userController.getUsers);
 
 /**
  * @route DELETE /user/:id
- * @description  Delete comment
- * @body
- * @access Login required
+ * @description  Delete a user
+ * @access Admin required
  */
+
 router.delete(
   "/:id",
   authentication.loginRequired,

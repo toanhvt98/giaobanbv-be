@@ -4,15 +4,17 @@ const baocaongaySchema = Schema(
   {
     Ngay: { type: Date, require: true },
     KhoaID: { type: Schema.ObjectId, required: true, ref: "Khoa" },
+    UserID: { type: Schema.ObjectId, required: true, ref: "User" },
     BSTruc: { type: String, default: "" },
     DDTruc: { type: String, default: "" },
     GhiChu: { type: String, default: "" },
     CBThemGio: { type: String, default: "" },
-    UserID: { type: Schema.ObjectId, required: true, ref: "User" },
     // Embedded BCChiTietBenhNhan
     ChiTietBenhNhan: [
       {
         TenBenhNhan: { type: String, required: true },
+        LoaiBN: { type: Number, required: true },
+        Stt: { type: Number, required: true },
         GioiTinh: { type: String, default: "" },
         Tuoi: { type: String, default: "" },
         DiaChi: { type: String, default: "" },
@@ -23,8 +25,6 @@ const baocaongaySchema = Schema(
         XuTri: { type: String, default: "" },
         HienTai: { type: String, default: "" },
         Images: { type: [String], default: [] },
-        LoaiBN: { type: Number, required: true },
-        Stt: { type: Number, required: true },
         GhiChu: { type: String, default: "" },
       },
       { _id: false },

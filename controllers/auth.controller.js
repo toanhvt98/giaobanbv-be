@@ -14,7 +14,7 @@ authController.loginWithUserName = catchAsync(async (req, res, next) => {
   if (!user) throw new AppError(400, "Invalid Credentials", "Login Error");
   //Process
   const isMatch = await bcrypt.compare(PassWord, user.PassWord);
-  if (!isMatch) throw new AppError(400, "Invalid Credentials", "Login Error");
+  if (!isMatch) throw new AppError(400, "Wrong password", "Login Error");
   const accessToken = await user.generateToken();
   //Response
   sendResponse(res, 200, true, { user, accessToken }, null, "Login success");

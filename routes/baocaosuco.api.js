@@ -7,10 +7,10 @@ const baocaosucoController = require("../controllers/baocaosuco.controller");
 const authentication = require("../middlewares/authentication");
 
 /**
- * @route POST /baocaongay
- * @description Insert a new account
- * @body { Ngay,KhoaID,BaoCaoNgay}
- * @access
+ * @route POST /baocaosuco
+ * @description Insert  new baocaosuco
+ * @body {baocaosuco}
+ * @access  login require,
  */
 router.post(
   "/",
@@ -19,16 +19,18 @@ router.post(
   baocaosucoController.insertOne
 );
 
-// router.get(
-//   "/",
-//   authentication.loginRequired,
-//   baocaongayController.getOneByNgayKhoaID
-// );
+/**
+ * @route GET /baocaosuco
+ * @description Get all baocaosuco
+ 
+ * @access  login require,
+ */
 router.get(
   "/",
   authentication.loginRequired,
   baocaosucoController.getBaocaosucos
 );
+
 router.get(
   "/danhsach",
   authentication.loginRequired,
@@ -46,6 +48,12 @@ router.get(
   baocaosucoController.tongHopSuCoTheoKhoa
 );
 
+/**
+ * @route GET /baocaosuco/:sucoId
+ * @description Get one baocaosuco
+ * @params {sucoId}
+ * @access  login require,
+ */
 router.get(
   "/:sucoId",
   authentication.loginRequired, validators.validate([param("sucoId").exists().isString().custom(validators.checkObjectId)]),

@@ -25,9 +25,8 @@ router.post(
 );
 
 /**
- * @route POST /users
- * @description Insert a new account
- * @body {TenKhoa,LoaiKhoa,STT,MaKhoa}
+ * @route GET /khoa
+ * @description get all Khoa
  * @access
  */
 router.get(

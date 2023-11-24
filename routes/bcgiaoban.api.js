@@ -21,15 +21,31 @@ router.post(
   bcgiaobanController.insertOne
 );
 
-// get bcgiaoban theo fromDate toDate, tra ra bcgiaoban co bo sung ngay
+/**
+ * @route GET /bcgiaoban/allbyngay
+ * @description get bcgiaoban by fromDate toDate
+ * @params {fromDate, toDate}
+ * @access login require,
+ */
 router.get("/allbyngay",authentication.loginRequired,bcgiaobanController.getByNgay)
 module.exports = router;
 
-//update or insert BCGiaoBan theo fromDate va toDate, tra ra giong nhu tren
+/**
+ * @route POST /bcgiaoban/allbyngay
+ * @description update or insert bcgiaoban by fromDate toDate
+ * @body [bcgiaobans]
+ * @access login require,
+ */
 router.post("/allbyngay",authentication.loginRequired,bcgiaobanController.updateOrInsert)
 
 
-//update or insert BCGiaoBan theo fromDate va toDate, tra ra giong nhu tren
+/**
+ * @route POST /bcgiaoban/trangthai
+ * @description update trangthai for bcgiaoban by date,trangthai
+ * @body {ngay,trangthai}
+ * @access login require,
+ */
+
 router.post("/trangthai",authentication.loginRequired,bcgiaobanController.updateOrInsertTrangThai)
 
 module.exports = router;

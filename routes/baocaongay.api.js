@@ -8,9 +8,9 @@ const authentication = require("../middlewares/authentication");
 
 /**
  * @route POST /baocaongay
- * @description Insert a new account
+ * @description Insert or Update a new baocaongay
  * @body { Ngay,KhoaID,BaoCaoNgay}
- * @access
+ * @access  login require,
  */
 router.post(
   "/",
