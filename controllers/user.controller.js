@@ -63,7 +63,7 @@ userController.getUsers = catchAsync(async (req, res, next) => {
   page = parseInt(page) || 1;
   limit = parseInt(limit) || 10;
 
-  const filterConditions = [];
+  const filterConditions = [{ isDeleted: false }];
 
   if (filter.UserName) {
     // filterConditions.push({ UserName: { $regex: filter.UserName, $options: "i" } });
@@ -172,9 +172,10 @@ userController.deleteUser = catchAsync(async (req, res, next) => {
   
   const userId = req.params.id;
 
-  const user = await User.findOneAndDelete({
+  const user = await User.findOneAndUpdate({
     _id: userId,
-    });
+    },{ isDeleted: true },
+    { new: true });
  
   return sendResponse(
     res,

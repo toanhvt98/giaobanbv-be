@@ -120,7 +120,7 @@ baocaosucoController.getBaocaosucosForDataGrid = catchAsync(async (req, res, nex
   const limit =  100;
 
   // Tạo một đối tượng cho các điều kiện tìm kiếm
-  const filterConditions = [];
+  const filterConditions = [{ isDeleted: false }];
 
   
     // Thêm điều kiện NgaySuCo nằm trong khoảng fromdate và todate
@@ -169,9 +169,10 @@ baocaosucoController.deleteOneSuco = catchAsync(async (req, res, next) => {
   
   const sucoId = req.params.sucoId;
 
-  const suco = await BaoCaoSuCo.findOneAndDelete({
+  const suco = await BaoCaoSuCo.findOneAndUpdate({
     _id: sucoId,
-    });
+    },{ isDeleted: true },
+    { new: true });
  
   return sendResponse(
     res,
@@ -271,6 +272,7 @@ console.log("date",fromDate,toDate)
           $lte: toDate,
         },
         TrangThai: true,
+        isDeleted: false 
       },
     },
     {
@@ -535,6 +537,7 @@ const results = await BaoCaoSuCo.aggregate([
         $lte: toDate,
       },
       TrangThai: true,
+      isDeleted: false 
     },
   },
   {

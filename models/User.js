@@ -9,7 +9,7 @@ const userSchema = Schema(
 
     KhoaID: {type: Schema.ObjectId, required: true, ref: "Khoa"  },
     HoTen: { type: String, require: false, default: "" },
-
+    isDeleted: { type: Boolean, default: false, select: false },
     Email: { type: String, require: false, default: "" },
     PhanQuyen: {
       type: String,
@@ -35,3 +35,4 @@ userSchema.methods.generateToken = async function () {
 
 const User = mongosee.model("User", userSchema);
 module.exports = User;
+

@@ -46,7 +46,7 @@ router.post("/allbyngay",authentication.loginRequired,bcgiaobanController.update
  * @access login require,
  */
 
-router.post("/trangthai",authentication.loginRequired,bcgiaobanController.updateOrInsertTrangThai)
+router.post("/trangthai",authentication.loginRequired,authentication.adminOrTongtrucRequired,bcgiaobanController.updateOrInsertTrangThai)
 
 module.exports = router;
  

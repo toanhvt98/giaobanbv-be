@@ -14,7 +14,7 @@ const authentication = require("../middlewares/authentication");
  */
 router.post(
   "/",
-  authentication.loginRequired,
+  authentication.loginRequired,authentication.adminRequired,
   validators.validate([
     body("UserName", "Invalid name").exists().notEmpty(),
     body("PassWord", "Invalid password").exists().notEmpty(),
@@ -26,7 +26,7 @@ router.post(
 );
 
 //thieeu authentication.loginRequired
-router.get("/", userController.getUsers);
+router.get("/",authentication.loginRequired,authentication.adminRequired, userController.getUsers);
 
 
 /**
@@ -46,7 +46,7 @@ router.get("/", userController.getUsers);
  */
  router.put(
   "/:id",
-  authentication.loginRequired,
+  authentication.loginRequired,authentication.adminRequired,
   validators.validate([
     param("id").exists().isString().custom(validators.checkObjectId),
   ]),
@@ -61,7 +61,7 @@ router.get("/", userController.getUsers);
  */
  router.put(
   "/resetpass/:id",
-  authentication.loginRequired,
+  authentication.loginRequired,authentication.adminRequired,
   validators.validate([
     param("id").exists().isString().custom(validators.checkObjectId),
   ]),
@@ -73,11 +73,11 @@ router.get("/", userController.getUsers);
  * @route PUT /user/me/resetpass/
  * @description  reset pass curent user
  * @body {PassWord}
- * @access Login require
+ * @access Admin require
  */
  router.put(
   "/me/resetpass",
-  authentication.loginRequired,
+  authentication.loginRequired,authentication.adminRequired,
   
   userController.resetPassMe
 );
@@ -91,7 +91,7 @@ router.get("/", userController.getUsers);
 
 router.delete(
   "/:id",
-  authentication.loginRequired,
+  authentication.loginRequired,authentication.adminRequired,
   validators.validate([
     param("id").exists().isString().custom(validators.checkObjectId),
     
