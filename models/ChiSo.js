@@ -11,3 +11,4 @@ const chisoSchema = Schema(
 );
 const ChiSo = mongosee.model("ChiSo", chisoSchema);
 module.exports = ChiSo;
+6

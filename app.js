@@ -4,6 +4,18 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const cors = require("cors");
+var whitelist = ['http://192.168.5.136:3001',`https://bvdktphutho.net`,`http://bvdktphutho.net`,`http://192.168.5.136:3000`,`http://localhost:3000`];
+var corsOptionsDelegate = function(req, callback){
+  var corsOptions;
+  if(whitelist.indexOf(req.header('Origin')) !== -1){
+    corsOptions = { origin: true }; // reflect (enable) the requested origin in the CORS response
+  }else{
+    corsOptions = { origin: false }; // disable CORS for this request
+  }
+  callback(null, corsOptions); // callback expects two parameters: error and options
+};
+
+
 const { sendResponse } = require("./helpers/utils");
 
 const indexRouter = require("./routes/index");
@@ -14,7 +26,8 @@ app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(cors());
+//chỉnh CORS
+app.use(cors(corsOptionsDelegate));
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/api", indexRouter);
