@@ -25,4 +25,8 @@ router.use("/baocaongay", baocaongayApi);
 const baocaosucoApi = require("./baocaosuco.api");
 router.use("/baocaosuco", baocaosucoApi);
 
+//baocaongayApi
+const dashboardApi = require("./dashboard.api");
+router.use("/dashboard", dashboardApi);
+
 module.exports = router;
