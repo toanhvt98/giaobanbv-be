@@ -12,16 +12,6 @@ const authentication = require("../middlewares/authentication");
  * @body { Ngay,KhoaID,dashboard}
  * @access  login require,
  */
-router.post(
-  "/",
-  authentication.loginRequired,
-  validators.validate([
-    body("Ngay", "Invalid Ngay").exists().notEmpty(),
-    body("KhoaID", "Invalid KhoaID").exists().notEmpty(),
-    
-       ]),
-  dashboardController.insertOrUpdateOne
-);
 
 router.get(
   "/",

@@ -3,39 +3,6 @@ const DashBoard = require("../models/DashBoard");
 
 const dashboardController = {};
 
-dashboardController.insertOrUpdateOne = catchAsync(async (req, res, next) => {
-  //get data from request
-  // let { Ngay,KhoaID, BSTruc, DDTruc, GhiChu,CBThemGio,UserID,ChiTietBenhNhan,ChiTietChiSo } = req.body;
-  console.log("reqbody", req.body);
-  let { Ngay, KhoaID, bcGiaoBanTheoNgay } = req.body;
-
-  //Business Logic Validation
-  let dashBoard = await DashBoard.findOne({ Ngay, KhoaID });
-  console.log(dashBoard);
-  if (dashBoard) {
-    const id = dashBoard._id;
-    dashBoard = await dashBoard.findByIdAndUpdate(id, bcGiaoBanTheoNgay, {
-      new: true,
-    });
-  } else {
-    dashBoard = await dashBoard.create(bcGiaoBanTheoNgay);
-  }
-
-  //Process
-
-  // dashBoard = await dashBoard.create({Ngay,KhoaID, BSTruc, DDTruc, GhiChu,CBThemGio,UserID,ChiTietBenhNhan,ChiTietChiSo });
-
-  //Response
-  sendResponse(
-    res,
-    200,
-    true,
-    { dashBoard },
-    null,
-    "Cap nhat dashBoard success"
-  );
-});
-
 dashboardController.getOneNewestByNgay = catchAsync(async (req, res, next) => {
     // Lấy dữ liệu từ request
     console.log("reqbody", req.query);
@@ -64,7 +31,7 @@ dashboardController.getOneNewestByNgay = catchAsync(async (req, res, next) => {
         // Thêm các trường khác nếu cần
       };
       
-      sendResponse(res, 200, true, { dashboard }, null, "Get dashboard success, dashboard chưa có trong DB");
+      throw new AppError(400, "dashboard not found", "Chưa có dữ liệu dashboard"); 
     } else {
       // Phản hồi
       sendResponse(res, 200, true, { dashboard }, null, "Get dashboard success, dashboard đã có trong DB");
