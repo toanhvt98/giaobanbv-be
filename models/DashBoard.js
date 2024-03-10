@@ -7,7 +7,7 @@ const dashBoardSchema = Schema(
    ChiSoDashBoard : [
     {
         Code: {type: String, required:true},
-        Value:{type: Number,required:true},
+        Value:{type: String,required:true},
         _id:false
     }
    ],
