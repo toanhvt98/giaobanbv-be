@@ -29,4 +29,8 @@ router.use("/baocaosuco", baocaosucoApi);
 const dashboardApi = require("./dashboard.api");
 router.use("/dashboard", dashboardApi);
 
+//baocaongayApi
+const khuyencaokhoaApi = require("./khuyencaokhoa.api");
+router.use("/khuyencaokhoa", khuyencaokhoaApi);
+
 module.exports = router;

@@ -7,21 +7,6 @@ const khuyencaokhoaController = require("../controllers/khuyencaokhoa.controller
 const authentication = require("../middlewares/authentication");
 
 /**
- * @route POST /bcgiaobans
- * @description Insert a new account
- * @body {Ngay,TTHeNoi,TTHeNgoai,TrangThai}
- * @access
- */
-router.post(
-  "/",
-  authentication.loginRequired,
-  validators.validate([
-    body("Ngay", "Invalid Ngay").exists().notEmpty(),
-       ]),
-  khuyencaokhoaController.insertOne
-);
-
-/**
  * @route GET /khuyencaokhoa/getonebythangnam
  * @description get khuyencaokhoa by thang nam
  * @params {Thang, Nam}

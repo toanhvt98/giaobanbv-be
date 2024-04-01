@@ -8,6 +8,7 @@ const khuyencaoKhoaSchema = Schema(
    KhuyenCao : [
     {
         MaKhoa: {type: String, required:false},
+        TenKhoa: {type: String, required:false},
         DoanhThu:{type: Number,required:false},
         TyLeBHYT:{type: Number,required:false},
         _id:false
