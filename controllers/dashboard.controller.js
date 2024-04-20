@@ -38,40 +38,40 @@ const moment = require('moment-timezone');
 //     }
 //   });
 
-dashboardController.getOneNewestByNgay = catchAsync(async (req, res, next) => {
-  console.log("reqbody", req.query);
-  const NgayISO = req.query.Ngay;
+// dashboardController.getOneNewestByNgay = catchAsync(async (req, res, next) => {
+//   console.log("reqbody", req.query);
+//   const NgayISO = req.query.Ngay;
   
-  const NgayStart = new Date(NgayISO);
-  NgayStart.setHours(0, 0, 0, 0); // Đặt thời gian bắt đầu của ngày
+//   const NgayStart = new Date(NgayISO);
+//   NgayStart.setHours(0, 0, 0, 0); // Đặt thời gian bắt đầu của ngày
 
-  const NgayEnd = new Date(NgayISO);
-  NgayEnd.setHours(23, 59, 59, 999); // Đặt thời gian kết thúc của ngày
+//   const NgayEnd = new Date(NgayISO);
+//   NgayEnd.setHours(23, 59, 59, 999); // Đặt thời gian kết thúc của ngày
 
-  // Điều chỉnh cho giờ Việt Nam (UTC+7)
-  const offset = NgayStart.getTimezoneOffset() + 420; // 420 phút = 7 giờ
-  NgayStart.setMinutes(NgayStart.getMinutes() - offset);
-  NgayEnd.setMinutes(NgayEnd.getMinutes() - offset);
+//   // Điều chỉnh cho giờ Việt Nam (UTC+7)
+//   const offset = NgayStart.getTimezoneOffset() + 420; // 420 phút = 7 giờ
+//   NgayStart.setMinutes(NgayStart.getMinutes() - offset);
+//   NgayEnd.setMinutes(NgayEnd.getMinutes() - offset);
 
-  console.log("Ngày bắt đầu", NgayStart);
-  console.log("Ngày kết thúc", NgayEnd);
+//   console.log("Ngày bắt đầu", NgayStart);
+//   console.log("Ngày kết thúc", NgayEnd);
 
-  let dashboard = await DashBoard.findOne({ 
-    Ngay: { $gte: NgayStart, $lte: NgayEnd }
-  }).sort({ Ngay: -1 }); 
+//   let dashboard = await DashBoard.findOne({ 
+//     Ngay: { $gte: NgayStart, $lte: NgayEnd }
+//   }).sort({ Ngay: -1 }); 
 
-  console.log("dashboard", dashboard);
+//   console.log("dashboard", dashboard);
   
-  if (!dashboard) {
-    dashboard = {
-      Ngay: NgayStart,
-    };
+//   if (!dashboard) {
+//     dashboard = {
+//       Ngay: NgayStart,
+//     };
     
-    throw new AppError(400, "dashboard not found", "Chưa có dữ liệu dashboard"); 
-  } else {
-    sendResponse(res, 200, true, { dashboard }, null, "Get dashboard success, dashboard đã có trong DB");
-  }
-});
+//     throw new AppError(400, "dashboard not found", "Chưa có dữ liệu dashboard"); 
+//   } else {
+//     sendResponse(res, 200, true, { dashboard }, null, "Get dashboard success, dashboard đã có trong DB");
+//   }
+// });
 
 dashboardController.getAllByNgay = catchAsync(async (req, res, next) => {
   //get data from request
@@ -99,32 +99,32 @@ sendResponse(res, 200, true, { dashBoards }, null, "Get BaoCaoNgay All success,"
 
 
 
-// dashboardController.getOneNewestByNgay = catchAsync(async (req, res, next) => {
-//     console.log("reqbody", req.query);
-//     const NgayISO = req.query.Ngay;
+dashboardController.getOneNewestByNgay = catchAsync(async (req, res, next) => {
+    console.log("reqbody", req.query);
+    const NgayISO = req.query.Ngay;
 
-//     // Chuyển đổi NgayISO sang giờ Việt Nam và thiết lập thời gian bắt đầu và kết thúc của ngày
-//     const NgayStart = moment.tz(NgayISO, "Asia/Ho_Chi_Minh").startOf('day').toDate();
-//     const NgayEnd = moment.tz(NgayISO, "Asia/Ho_Chi_Minh").endOf('day').toDate();
+    // Chuyển đổi NgayISO sang giờ Việt Nam và thiết lập thời gian bắt đầu và kết thúc của ngày
+    const NgayStart = moment.tz(NgayISO, "Asia/Ho_Chi_Minh").startOf('day').toDate();
+    const NgayEnd = moment.tz(NgayISO, "Asia/Ho_Chi_Minh").endOf('day').toDate();
 
-//     console.log("Ngày bắt đầu", NgayStart);
-//     console.log("Ngày kết thúc", NgayEnd);
+    console.log("Ngày bắt đầu", NgayStart);
+    console.log("Ngày kết thúc", NgayEnd);
 
-//     let dashboard = await DashBoard.findOne({
-//       Ngay: { $gte: NgayStart, $lte: NgayEnd }
-//     }).sort({ Ngay: -1 });
+    let dashboard = await DashBoard.findOne({
+      Ngay: { $gte: NgayStart, $lte: NgayEnd }
+    }).sort({ Ngay: -1 });
 
-//     console.log("dashboard", dashboard);
+    console.log("dashboard", dashboard);
 
-//     if (!dashboard) {
-//         dashboard = {
-//             Ngay: NgayStart,
-//         };
+    if (!dashboard) {
+        dashboard = {
+            Ngay: NgayStart,
+        };
 
-//         throw new AppError(400, "dashboard not found", "Chưa có dữ liệu dashboard");
-//     } else {
-//         sendResponse(res, 200, true, { dashboard }, null, "Get dashboard success, dashboard đã có trong DB");
-//     }
-// });
+        throw new AppError(400, "dashboard not found", "Chưa có dữ liệu dashboard");
+    } else {
+        sendResponse(res, 200, true, { dashboard }, null, "Get dashboard success, dashboard đã có trong DB");
+    }
+});
 
 module.exports = dashboardController;
