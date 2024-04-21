@@ -110,38 +110,40 @@ dashboardController.getOneNewestByNgay = catchAsync(async (req, res, next) => {
     console.log("Ngày bắt đầu", NgayStart);
     console.log("Ngày kết thúc", NgayEnd);
 
-     // Sử dụng aggregation để lọc các phần tử không mong muốn
-     const dashboard = await DashBoard.aggregate([
-      {
-          $match: {
-              Ngay: { $gte: NgayStart, $lte: NgayEnd },
-          },
+// Aggregation để lấy tài liệu có thời gian mới nhất và loại bỏ dữ liệu không cần thiết
+const dashboard = await DashBoard.aggregate([
+  {
+      $match: {
+          Ngay: { $gte: NgayStart, $lte: NgayEnd },  // Lọc trong khoảng thời gian
       },
-      {
-          $sort: { Ngay: -1 },
-      },
-      {
-          $project: {
-              Ngay: 1, // Chỉ giữ trường Ngay
-              ChiSoDashBoard: {
-                  $filter: {
-                      input: '$ChiSoDashBoard', // Lọc mảng ChiSoDashBoard
-                      as: 'chiSo',
-                      cond: {
-                          $not: {
-                              $in: [
-                                  '$$chiSo.Code',
-                                  ['json_doanhthu_toanvien_bacsi_duyetketoan', 'json_doanhthu_toanvien_bacsi_theochidinh'], // Các mã cần loại bỏ
-                              ],
-                          },
+  },
+  {
+      $sort: { Ngay: -1 },  // Sắp xếp theo thời gian giảm dần
+  },
+  {
+      $project: {
+          Ngay: 1,  // Giữ lại trường Ngay
+          ChiSoDashBoard: {
+              $filter: {
+                  input: '$ChiSoDashBoard',  // Lọc dữ liệu không mong muốn
+                  as: 'chiSo',
+                  cond: {
+                      $not: {
+                          $in: [
+                              '$$chiSo.Code',  // Loại bỏ các Code không mong muốn
+                              ['json_doanhthu_toanvien_bacsi_duyetketoan', 'json_doanhthu_toanvien_bacsi_theochidinh'],
+                          ],
                       },
                   },
               },
           },
       },
-  ]);
+  },
+  {
+      $limit: 1,  // Lấy tài liệu có thời gian mới nhất
+  },
+]);
 
-  console.log("dashboard", dashboard);
 
   if (dashboard && dashboard.length > 0) {
       sendResponse(res, 200, true, { dashboard: dashboard[0] }, null, "Get dashboard success, dashboard đã có trong DB");
