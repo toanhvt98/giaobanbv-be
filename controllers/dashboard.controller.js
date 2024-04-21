@@ -110,21 +110,45 @@ dashboardController.getOneNewestByNgay = catchAsync(async (req, res, next) => {
     console.log("Ngày bắt đầu", NgayStart);
     console.log("Ngày kết thúc", NgayEnd);
 
-    let dashboard = await DashBoard.findOne({
-      Ngay: { $gte: NgayStart, $lte: NgayEnd }
-    }).sort({ Ngay: -1 });
+     // Sử dụng aggregation để lọc các phần tử không mong muốn
+     const dashboard = await DashBoard.aggregate([
+      {
+          $match: {
+              Ngay: { $gte: NgayStart, $lte: NgayEnd },
+          },
+      },
+      {
+          $sort: { Ngay: -1 },
+      },
+      {
+          $project: {
+              Ngay: 1, // Chỉ giữ trường Ngay
+              ChiSoDashBoard: {
+                  $filter: {
+                      input: '$ChiSoDashBoard', // Lọc mảng ChiSoDashBoard
+                      as: 'chiSo',
+                      cond: {
+                          $not: {
+                              $in: [
+                                  '$$chiSo.Code',
+                                  ['json_doanhthu_toanvien_bacsi_duyetketoan', 'json_doanhthu_toanvien_bacsi_theochidinh'], // Các mã cần loại bỏ
+                              ],
+                          },
+                      },
+                  },
+              },
+          },
+      },
+  ]);
 
-    console.log("dashboard", dashboard);
+  console.log("dashboard", dashboard);
 
-    if (!dashboard) {
-        dashboard = {
-            Ngay: NgayStart,
-        };
-
-        throw new AppError(400, "dashboard not found", "Chưa có dữ liệu dashboard");
-    } else {
-        sendResponse(res, 200, true, { dashboard }, null, "Get dashboard success, dashboard đã có trong DB");
-    }
+  if (dashboard && dashboard.length > 0) {
+      sendResponse(res, 200, true, { dashboard: dashboard[0] }, null, "Get dashboard success, dashboard đã có trong DB");
+  } else {
+      throw new AppError(400, "dashboard not found", "Chưa có dữ liệu dashboard");
+  }
 });
 
 module.exports = dashboardController;
+
