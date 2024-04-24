@@ -152,5 +152,74 @@ const dashboard = await DashBoard.aggregate([
   }
 });
 
+
+dashboardController.getOneNewestByNgayKhoa = catchAsync(async (req, res, next) => {
+  console.log("reqbody", req.query);
+  const NgayISO = req.query.Ngay;
+  const KhoaID = req.query.KhoaID;
+
+  // Chuyển đổi NgayISO sang giờ Việt Nam và thiết lập thời gian bắt đầu và kết thúc của ngày
+  const NgayStart = moment.tz(NgayISO, "Asia/Ho_Chi_Minh").startOf('day').toDate();
+  const NgayEnd = moment.tz(NgayISO, "Asia/Ho_Chi_Minh").endOf('day').toDate();
+
+  console.log("Ngày bắt đầu", NgayStart);
+  console.log("Ngày kết thúc", NgayEnd);
+
+// Aggregation để lấy tài liệu có thời gian mới nhất và loại bỏ dữ liệu không cần thiết
+const dashboard = await DashBoard.aggregate([
+{
+    $match: {
+        Ngay: { $gte: NgayStart, $lte: NgayEnd },  // Lọc trong khoảng thời gian
+    },
+},
+{
+    $sort: { Ngay: -1 },  // Sắp xếp theo thời gian giảm dần
+},
+{
+    $project: {
+        Ngay: 1,  // Giữ lại trường Ngay
+        ChiSoDashBoard: {
+            $filter: {
+                input: '$ChiSoDashBoard',  // Lọc dữ liệu không mong muốn
+                as: 'chiSo',
+                cond: {
+                   
+                        $in: [
+                            '$$chiSo.Code',  // Loại bỏ các Code không mong muốn
+                            ['json_doanhthu_toanvien_bacsi_duyetketoan','json_doanhthu_toanvien_bacsi_theochidinh'],
+                        ],
+                   
+                },
+            },
+        },
+    },
+},
+{
+    $limit: 1,  // Lấy tài liệu có thời gian mới nhất
+},
+]);
+
+if (!dashboard || dashboard.length === 0 || dashboard[0].ChiSoDashBoard.length === 0) {
+  throw new AppError(404, 'Data not found', 'Không tìm thấy dữ liệu cho ngày và khoaid này');
+}
+console.log("dashboard 2",dashboard[0].ChiSoDashBoard)
+
+const chisoKhoa = {}
+
+dashboard[0].ChiSoDashBoard.forEach(item => {
+  const chiSoJson = JSON.parse(item.Value); // Chuyển đổi từ chuỗi JSON thành đối tượng
+ const chiSoTheoKhoaid = chiSoJson.filter(
+     (item) => item.khoaid === parseInt(KhoaID, 10) // Lọc theo khoaid
+ );
+ chisoKhoa[item.Code] = chiSoTheoKhoaid
+ 
+});
+
+ // Trả về kết quả
+ sendResponse(res, 200, true, { chisoKhoa }, null, 'Lấy dữ liệu thành công');
+
+});
+
+
 module.exports = dashboardController;
 

@@ -19,6 +19,13 @@ router.get(
   dashboardController.getOneNewestByNgay
 );
 router.get(
+  "/khoa",
+  authentication.loginRequired,
+  dashboardController.getOneNewestByNgayKhoa
+);
+
+
+router.get(
   "/all",
   authentication.loginRequired,
   dashboardController.getAllByNgay
