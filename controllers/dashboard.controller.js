@@ -131,7 +131,8 @@ const dashboard = await DashBoard.aggregate([
                       $not: {
                           $in: [
                               '$$chiSo.Code',  // Loại bỏ các Code không mong muốn
-                              ['json_doanhthu_toanvien_bacsi_duyetketoan', 'json_doanhthu_toanvien_bacsi_theochidinh'],
+                              ['json_doanhthu_toanvien_bacsi_duyetketoan','json_doanhthu_toanvien_bacsi_theochidinh',
+                        'json_doanhthu_canlamsang_duyetketoan_khoa','json_doanhthu_canlamsang_theochidinh_khoa'],
                           ],
                       },
                   },
@@ -186,7 +187,8 @@ const dashboard = await DashBoard.aggregate([
                    
                         $in: [
                             '$$chiSo.Code',  // Loại bỏ các Code không mong muốn
-                            ['json_doanhthu_toanvien_bacsi_duyetketoan','json_doanhthu_toanvien_bacsi_theochidinh'],
+                            ['json_doanhthu_toanvien_bacsi_duyetketoan','json_doanhthu_toanvien_bacsi_theochidinh',
+                        'json_doanhthu_canlamsang_duyetketoan_khoa','json_doanhthu_canlamsang_theochidinh_khoa'],
                         ],
                    
                 },
@@ -212,7 +214,7 @@ dashboard[0].ChiSoDashBoard.forEach(item => {
      (item) => item.khoaid === parseInt(KhoaID, 10) // Lọc theo khoaid
  );
  chisoKhoa[item.Code] = chiSoTheoKhoaid
- 
+ chisoKhoa['Ngay'] = dashboard[0].Ngay
 });
 
  // Trả về kết quả
