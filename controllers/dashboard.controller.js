@@ -222,6 +222,34 @@ dashboard[0].ChiSoDashBoard.forEach(item => {
 
 });
 
+dashboardController.deleteByNgay = catchAsync(async (req, res, next) => {
+    const NgayISO = req.query.Ngay;
+
+    // Chuyển đổi NgayISO sang giờ Việt Nam và thiết lập thời gian bắt đầu và kết thúc của ngày
+    const NgayStart = moment.tz(NgayISO, "Asia/Ho_Chi_Minh").startOf('day').toDate();
+    const NgayEnd = moment.tz(NgayISO, "Asia/Ho_Chi_Minh").endOf('day').toDate();
+
+    // Tìm _id của bản ghi mới nhất trong ngày
+    const latestRecord = await DashBoard.findOne({
+        Ngay: { $gte: NgayStart, $lte: NgayEnd }
+    }).sort({ Ngay: -1 }).select('_id');
+
+    if (!latestRecord) {
+        return next(new AppError(404, "No records found for the given date", "Không tìm thấy bản ghi"));
+    }
+
+    // Xóa các bản ghi không phải là mới nhất
+    const deleteResult = await DashBoard.deleteMany({
+        _id: { $ne: latestRecord._id },
+        Ngay: { $gte: NgayStart, $lte: NgayEnd }
+    });
+
+    if (deleteResult.deletedCount === 0) {
+        sendResponse(res, 404, false, null, "No old records were deleted");
+    } else {
+        sendResponse(res, 200, true, { deletedCount: deleteResult.deletedCount }, null, "Old records deleted successfully");
+    }
+});
 
 module.exports = dashboardController;
 

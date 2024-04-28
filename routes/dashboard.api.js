@@ -31,4 +31,13 @@ router.get(
   dashboardController.getAllByNgay
 );
 
+
+router.delete(
+  "/delbyngay",
+  authentication.loginRequired,authentication.adminRequired,
+  dashboardController.deleteByNgay
+);
+
+
 module.exports = router;
+
