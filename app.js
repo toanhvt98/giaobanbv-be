@@ -4,7 +4,7 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const cors = require("cors");
-var whitelist = ['http://192.168.5.136:3001',`https://bvdktphutho.net`,`http://bvdktphutho.net`,`http://192.168.5.136:3000`,`http://localhost:3000`];
+var whitelist = ['http://192.168.5.136:3001',`https://bvdktphutho.net`,`http://bvdktphutho.net`,`http://192.168.5.136:3000`,`http://localhost:3000`,`http://192.168.2.48:3000`];
 var corsOptionsDelegate = function(req, callback){
   var corsOptions;
   if(whitelist.indexOf(req.header('Origin')) !== -1){
