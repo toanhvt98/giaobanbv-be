@@ -4,17 +4,23 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const cors = require("cors");
-var whitelist = ['http://192.168.5.136:3001',`https://bvdktphutho.net`,`http://bvdktphutho.net`,`http://192.168.5.136:3000`,`http://localhost:3000`,`http://192.168.2.48:3000`];
-var corsOptionsDelegate = function(req, callback){
+var whitelist = [
+  "http://192.168.5.136:3001",
+  `https://bvdktphutho.net`,
+  `http://bvdktphutho.net`,
+  `http://192.168.5.136:3000`,
+  `http://localhost:3000`,
+  `http://192.168.2.48:3000`,
+];
+var corsOptionsDelegate = function (req, callback) {
   var corsOptions;
-  if(whitelist.indexOf(req.header('Origin')) !== -1){
+  if (whitelist.indexOf(req.header("Origin")) !== -1) {
     corsOptions = { origin: true }; // reflect (enable) the requested origin in the CORS response
-  }else{
+  } else {
     corsOptions = { origin: false }; // disable CORS for this request
   }
   callback(null, corsOptions); // callback expects two parameters: error and options
 };
-
 
 const { sendResponse } = require("./helpers/utils");
 
@@ -58,5 +64,7 @@ app.use((err, req, res, next) => {
     err.isOperational ? err.errorType : "Internal Server Error"
   );
 });
-
+app.get("/images", function (request, response) {
+  response.render("images");
+});
 module.exports = app;

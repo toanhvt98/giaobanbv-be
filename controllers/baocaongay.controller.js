@@ -41,11 +41,11 @@ baocaongayController.getOneByNgayKhoaID = catchAsync(async (req, res, next) => {
   console.log("reqbody", req.query);
   const NgayISO = req.query.Ngay;
   const KhoaID = req.query.KhoaID;
-const Ngay = new Date(NgayISO)
+  const Ngay = new Date(NgayISO);
   console.log("ngay", Ngay);
   console.log("Koa", KhoaID);
   //Business Logic Validation
-  let baocaongay = await BaoCaoNgay.findOne({ KhoaID,Ngay});
+  let baocaongay = await BaoCaoNgay.findOne({ KhoaID, Ngay });
   console.log("baocaongay", baocaongay);
   if (!baocaongay) {
     baocaongay = {
@@ -53,39 +53,62 @@ const Ngay = new Date(NgayISO)
       Ngay: Ngay,
       // Thêm các trường khác nếu cần
     };
-    console.log("BCngay insert",baocaongay);
-    sendResponse(res, 200, true, { baocaongay }, null, "Get BaoCaoNgay success, BaoCaoNgay chưa có trong DB");
+    console.log("BCngay insert", baocaongay);
+    sendResponse(
+      res,
+      200,
+      true,
+      { baocaongay },
+      null,
+      "Get BaoCaoNgay success, BaoCaoNgay chưa có trong DB"
+    );
   } else {
-//Response
-sendResponse(res, 200, true, { baocaongay }, null, "Get BaoCaoNgay success, BaoCaoNgay đã có trong DB");
+    //Response
+    sendResponse(
+      res,
+      200,
+      true,
+      { baocaongay },
+      null,
+      "Get BaoCaoNgay success, BaoCaoNgay đã có trong DB"
+    );
   }
 
   //Process
-
-  
 });
 baocaongayController.getAllByNgay = catchAsync(async (req, res, next) => {
   //get data from request
   console.log("reqbody", req.query);
   const NgayISO = req.query.Ngay;
-  
-const Ngay = new Date(NgayISO)
-  
+
+  const Ngay = new Date(NgayISO);
+
   //Business Logic Validation
-  let baocaongays = await BaoCaoNgay.find({Ngay}).populate('KhoaID');
+  let baocaongays = await BaoCaoNgay.find({ Ngay }).populate("KhoaID");
   console.log("baocaongay", baocaongays);
   if (!baocaongays) {
-    baocaongays = [],
-    
-    sendResponse(res, 200, true, { baocaongays}, null, "Get BaoCaoNgay All success, Chưa có dữ lệu nào");
+    (baocaongays = []),
+      sendResponse(
+        res,
+        200,
+        true,
+        { baocaongays },
+        null,
+        "Get BaoCaoNgay All success, Chưa có dữ lệu nào"
+      );
   } else {
-//Response
-sendResponse(res, 200, true, { baocaongays }, null, "Get BaoCaoNgay All success,");
+    //Response
+    sendResponse(
+      res,
+      200,
+      true,
+      { baocaongays },
+      null,
+      "Get BaoCaoNgay All success,"
+    );
   }
 
   //Process
-
-  
 });
 
 module.exports = baocaongayController;

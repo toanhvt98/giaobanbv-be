@@ -33,4 +33,7 @@ router.use("/dashboard", dashboardApi);
 const khuyencaokhoaApi = require("./khuyencaokhoa.api");
 router.use("/khuyencaokhoa", khuyencaokhoaApi);
 
+const daotaoApi = require("./daotao.api");
+router.use("/daotao", daotaoApi);
+
 module.exports = router;
