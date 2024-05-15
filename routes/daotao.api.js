@@ -20,17 +20,6 @@ router.post(
   daotao_thongtincanboController.them
 );
 
-router.put(
-  "/thongtincanbo/sua/:MaCanBo",
-  authentication.loginRequired,
-  daotao_thongtincanboController.themDanhSachTinChi
-);
-// Router hình thức tín chỉ
-router.put(
-  "/thongtincanbo/test/:MaCanBo",
-  authentication.loginRequired,
-  daotao_thongtincanboController.themDanhSachTongHopTinChi
-);
 // Router hình thức tín chỉ
 
 router.get(

@@ -18,10 +18,6 @@ const daotao_thongtincanboSchema = Schema(
     NgaySinh: { type: Date, required: true },
     AnhCanBo: { type: String, required: false },
     TinChiMacDinh: { type: Number, default: 0.0 },
-    TongHopTinChi: {
-      type: Array,
-      default: [],
-    },
   },
   { timestamps: true }
 );

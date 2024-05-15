@@ -24,71 +24,12 @@ daotao_thongtincanboController.them = catchAsync(async (req, res, next) => {
       true,
       { data },
       null,
-      `Thêm thành công cán bộ ${data.TenCanBo}`
+      `Thêm thành công cán bộ ${data_body.TenCanbo}`
     );
   } catch (error) {
     throw new AppError(400, error, "Lỗi thêm cán bộ");
   }
 });
-
-daotao_thongtincanboController.themDanhSachTinChi = catchAsync(
-  async (req, res, next) => {
-    const { MaCanBo } = req.params;
-    const tinChiData = {
-      _id: "663f85d541cb24b91b451cdc", // _id của hình thức tin chỉ
-      TenHinhThuc: "hinh thuc tu do1",
-      DanhSachTinChi: [],
-    };
-    try {
-      data = await daotao_thongtincanbo.findOneAndUpdate(
-        { MaCanBo: MaCanBo },
-        { $push: { TongHopTinChi: tinChiData } },
-        { new: true, useFindAndModify: false }
-      );
-      console.log(data);
-      sendResponse(
-        res,
-        201,
-        true,
-        { data },
-        null,
-        `Sửa thành công thành công cán bộ`
-      );
-    } catch (error) {
-      throw new AppError(400, error, "Sửa Lỗi ");
-    }
-  }
-);
-daotao_thongtincanboController.themDanhSachTongHopTinChi = catchAsync(
-  async (req, res, next) => {
-    const { MaCanBo } = req.params;
-    const tinChiData = {
-      _id: "testID", // _id của hình thức tin chỉ
-    };
-    try {
-      data = await daotao_thongtincanbo.findOneAndUpdate(
-        { MaCanBo: MaCanBo },
-        { $push: { "TongHopTinChi.$[elem].DanhSachTinChi": tinChiData } },
-        {
-          new: true,
-          useFindAndModify: false,
-          arrayFilters: [{ "elem._id": "663f85d541cb24b91b451cdc" }],
-        }
-      );
-      console.log(data);
-      sendResponse(
-        res,
-        201,
-        true,
-        { data },
-        null,
-        `Sửa thành công thành công cán bộ`
-      );
-    } catch (error) {
-      throw new AppError(400, error, "Sửa Lỗi ");
-    }
-  }
-);
 
 // Hình thức tính tín chỉ
 daotao_hinhthuctinchiController.getHinhThucTinChi = catchAsync(
